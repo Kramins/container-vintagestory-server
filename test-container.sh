@@ -1,0 +1,1 @@
+docker run -it --rm  -p 42420:42420 -v $(pwd)/data:/data/  kramins/vintagestory:latest

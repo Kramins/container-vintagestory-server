@@ -1,0 +1,50 @@
+# ============== runtime stage ==================
+FROM ubuntu:24.04 AS runtime
+# Build arguments for dynamic versioning
+ARG VS_TYPE=stable
+ARG VS_OS=linux-x64
+ARG VS_VERSION=1.21.5
+
+# Install .NET runtime, SQLite3, and other dependencies
+RUN apt-get update && apt upgrade -y && \
+    apt-get install -y --no-install-recommends ca-certificates screen dotnet-runtime-8.0 zlib1g sqlite3 wget curl tar libsqlite3-dev  && \
+    update-ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Environment variables with default values
+ENV VS_DATA_PATH=/data/vs
+ENV VS_LOG_PATH=/data/logs
+ENV VS_ADD_ORIGIN=/data/origin
+#ENV VS_ADD_MOD_PATH=/data/mods
+ENV VS_IP=
+ENV VS_PORT=42420
+ENV VS_MAXCLIENTS=16
+ENV VS_REDUCEDTHREADS=false
+ENV VS_ARCHIVE_LOG_FILE_COUNT=5
+ENV VS_ARCHIVE_LOG_FILE_MAX_SIZE_MB=1024
+ENV VS_EXTRA_ARGS=""
+
+# Delete existing user with UID 1000 if it exists
+RUN if id -u 1000 >/dev/null 2>&1; then userdel -r $(id -nu 1000); fi
+
+# Create a user with a unique UID and rename if UID 1000 already exists
+RUN useradd -m -u 1000 vintagestory
+
+
+WORKDIR /tmp
+RUN wget "https://cdn.vintagestory.at/gamefiles/${VS_TYPE}/vs_server_${VS_OS}_${VS_VERSION}.tar.gz" \
+    && mkdir -p /app \
+    && tar -xvzf "vs_server_${VS_OS}_${VS_VERSION}.tar.gz" -C /app \
+    && chown -R 1000:1000 /app \
+    && rm "vs_server_${VS_OS}_${VS_VERSION}.tar.gz"
+
+# USER vintagestory
+WORKDIR /app
+
+COPY root/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Expose necessary ports
+EXPOSE 42420
+
+# Set the default command to use the script
+CMD ["/usr/local/bin/entrypoint.sh"]

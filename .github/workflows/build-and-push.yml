@@ -52,6 +52,13 @@ jobs:
             --push \
             --file docker-bake.hcl
 
+      - name: Build dev containers
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx bake \
+            --file docker-bake.hcl \
+            --call build vintagestory-devcontainer
+
       - name: Image summary
         if: github.event_name != 'pull_request'
         run: |

@@ -86,36 +86,3 @@ target "vintagestory" {
     : []
 ])
 }
-target "vintagestory-devcontainer" {
-  matrix = {
-    VS_VERSION = versions
-  }
-
-  name        = "vintagestory-devcontainer-${replace(VS_VERSION, ".", "-")}-server"
-  dockerfile  = "./Dockerfile.devcontainer.ubuntu"
-  platforms   = ["linux/amd64"]
-
-  args = {
-    VS_VERSION = VS_VERSION
-  }
-
-  tags = flatten([
-
-  # Full version
-  [format("${registry}/${repo}/${container-name}-devcontainer:%s", VS_VERSION)],
-
-  # Minor (X.Y)
-  [format("${registry}/${repo}/${container-name}-devcontainer:%s.%s",
-        split(".", VS_VERSION)[0],
-        split(".", VS_VERSION)[1]
-     )],
-
-  # Major (X) 
-  [format("${registry}/${repo}/${container-name}-devcontainer:%s", split(".", VS_VERSION)[0])],
-
-  # latest
-  ["${registry}/${repo}/${container-name}-devcontainer:latest"],
-
-])
-
-}

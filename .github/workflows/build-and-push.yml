@@ -37,29 +37,35 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build images
+      - name: Build VintageStory Server Images
         if: github.event_name == 'pull_request'
         run: |
           docker buildx bake \
             --set "*.platform=linux/amd64" \
-            --file docker-bake.hcl
+            --file VintageStory-Server.hcl
 
-      - name: Build and push images
+      - name: Build VintageStory devcontainer Images
+        if: github.event_name == 'pull_request'
+        run: |
+          docker buildx bake \
+            --set "*.platform=linux/amd64" \
+            --file VintageStory-DevContainer.hcl
+
+      - name: Build and push VintageStory Server Images
         if: github.event_name != 'pull_request'
         run: |
           docker buildx bake \
             --set "*.platform=linux/amd64" \
             --push \
-            --file docker-bake.hcl
+            --file VintageStory-Server.hcl
 
-      - name: Build dev containers
+      - name: Build and push VintageStory devcontainer Images
         if: github.event_name != 'pull_request'
         run: |
           docker buildx bake \
             --set "*.platform=linux/amd64" \
             --push \
-            --file docker-bake.hcl \
-            --call build vintagestory-devcontainer
+            --file VintageStory-DevContainer.hcl
 
       - name: Image summary
         if: github.event_name != 'pull_request'

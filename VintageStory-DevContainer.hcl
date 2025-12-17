@@ -11,7 +11,7 @@ variable "container-name" {
 }
 
 variable "versions" {
-  default = ["1.21.5"]
+  default = ["1.21.6"]
 }
 
 variable "distros" {

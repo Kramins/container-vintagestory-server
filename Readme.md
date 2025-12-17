@@ -4,6 +4,31 @@ This repository provides a Docker container for running a Vintage Story game ser
 
 - **Status:** Alpha (expect breaking changes)
 
+## Container Versions
+
+### Server Container
+| Vintage Story Version | Available Tags | Notes |
+|----------------------|----------------|-------|
+| 1.21.6 | `1.21.6`, `1.21`, `1`, `latest` | ✅ Latest stable release |
+| 1.21.5 | `1.21.5` | Previous release |
+
+**Tag Strategy:**
+- `latest` - Always points to the newest stable version (currently 1.21.6)
+- `1` - Tracks the latest 1.x.x version
+- `1.21` - Tracks the latest 1.21.x version
+- `1.21.6` - Specific immutable version
+
+### DevContainer
+| Vintage Story Version | Available Tags | Notes |
+|----------------------|----------------|-------|
+| 1.21.6 | `1.21.6-ubuntu`, `1.21-ubuntu`, `1-ubuntu`, `latest` | ✅ Latest dev environment |
+
+**Tag Strategy:**
+- `latest` - Always points to the newest version
+- `1-ubuntu` - Tracks the latest 1.x.x version
+- `1.21-ubuntu` - Tracks the latest 1.21.x version
+- `1.21.6-ubuntu` - Specific immutable version
+
 ## Usage
 
 Build the container:
@@ -43,6 +68,10 @@ You can configure the server using the following environment variables:
 | VS_EXTRA_ARGS                 |                   | Extra arguments for the server     |
 
 Set these variables when running the container to customize server behavior.
+
+## Related Projects
+
+This container is designed to work with the [Granite Server Mod](https://github.com/Kramins/VintageStory-GraniteServer), which provides additional server management capabilities and features for Vintage Story servers.
 
 ## License
 

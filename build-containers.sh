@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default bake file
-BAKE_FILE="docker-bake.hcl"
+BAKE_FILE=""
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
@@ -21,6 +21,13 @@ while [[ "$#" -gt 0 ]]; do
   esac
   shift
 done
+
+# Check if a bake file was specified
+if [ -z "$BAKE_FILE" ]; then
+  echo "Error: You must specify either --dev-container or --server"
+  echo "Usage: $0 [--dev-container|--server]"
+  exit 1
+fi
 
 # Build using the specified bake file
 docker buildx bake --file "$BAKE_FILE"

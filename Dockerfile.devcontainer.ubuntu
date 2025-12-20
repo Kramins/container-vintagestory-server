@@ -6,7 +6,7 @@ RUN useradd -m vscode \
     && add-apt-repository ppa:dotnet/backports -y \
     && curl -fsSL https://deb.nodesource.com/setup_24.x | sudo bash - \
     && apt-get update \
-    && apt-get install -y dotnet-sdk-8.0 dotnet-sdk-9.0 git nodejs \
+    && apt-get install -y dotnet-sdk-8.0 dotnet-sdk-9.0 git nodejs jq \
     && echo "vintagestory ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
     && chmod 0440 /etc/sudoers.d/nopasswd
 

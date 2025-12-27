@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  vintagestory:
+    image: ghcr.io/kramins/vintagestory:latest
+    ports:
+      - "42420:42420"
+      - "5001:5000"
+    environment:
+      GS_PORT: 5000
+      GS_AUTHENTICATIONTYPE: "Basic"
+      GS_JWTEXPIRMINUTES: 60
+      GS_USERNAME: "admin"
+      # These will be automatically generated if not set and can be pulled from the mod config `graniteserverconfig.json` file after first run
+      #GS_JWTSECRET: "your-secret-key-here"
+      #GS_PASSWORD: "your-password-here"
+    volumes:
+      - ./data:/data

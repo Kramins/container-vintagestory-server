@@ -1,1 +1,1 @@
-docker run -it --rm  -p 42420:42420 -v $(pwd)/data:/data/  kramins/vintagestory:latest
+docker run -it --rm  -p 42420:42420 -p 5000:5000 -v $(pwd)/data:/data/  ghcr.io/kramins/vintagestory:latest

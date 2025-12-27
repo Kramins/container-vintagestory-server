@@ -24,6 +24,9 @@ ENV VS_ARCHIVE_LOG_FILE_COUNT=5
 ENV VS_ARCHIVE_LOG_FILE_MAX_SIZE_MB=1024
 ENV VS_EXTRA_ARGS=""
 
+ENV GS_REPO_PATH=Kramins/VintageStory-GraniteServer
+ENV GS_VERSION=latest
+
 # Delete existing user with UID 1000 if it exists
 RUN if id -u 1000 >/dev/null 2>&1; then userdel -r $(id -nu 1000); fi
 

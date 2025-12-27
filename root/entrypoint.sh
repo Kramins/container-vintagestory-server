@@ -52,14 +52,14 @@ if [ -n "$GS_REPO_PATH" ] && [ -n "$GS_VERSION" ]; then
     
     if [ "$GS_VERSION" = "latest" ]; then
         echo "Fetching latest Granite Server release..."
-        # Get the first release (including prereleases) from the releases list
-        RELEASE_DATA=$(curl -s "https://api.github.com/repos/${GS_REPO_PATH}/releases" | grep -m 1 -B 50 "browser_download_url.*GraniteServer-Release.*\.zip")
-        DOWNLOAD_URL=$(echo "$RELEASE_DATA" | grep "browser_download_url.*GraniteServer-Release.*\.zip" | head -1 | cut -d '"' -f 4)
-        TAG_NAME=$(echo "$RELEASE_DATA" | grep '"tag_name":' | head -1 | cut -d '"' -f 4)
+        RELEASE_DATA=$(curl -s "https://api.github.com/repos/${GS_REPO_PATH}/releases")
+        DOWNLOAD_URL=$(echo "$RELEASE_DATA" | jq -r '.[] | select(.draft == false) | .assets[] | select(.name | contains("GraniteServer")) | .browser_download_url' | head -1)
+        TAG_NAME=$(echo "$RELEASE_DATA" | jq -r '.[] | select(.draft == false) | select(.assets[] | select(.name | contains("GraniteServer"))) | .tag_name' | head -1)
     else
         echo "Fetching Granite Server release ${GS_VERSION}..."
-        DOWNLOAD_URL=$(curl -s "https://api.github.com/repos/${GS_REPO_PATH}/releases/tags/${GS_VERSION}" | grep "browser_download_url.*GraniteServer-Release.*\.zip" | cut -d '"' -f 4)
-        TAG_NAME="$GS_VERSION"
+        RELEASE_DATA=$(curl -s "https://api.github.com/repos/${GS_REPO_PATH}/releases/tags/${GS_VERSION}")
+        DOWNLOAD_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | contains("GraniteServer")) | .browser_download_url')
+        TAG_NAME=$(echo "$RELEASE_DATA" | jq -r '.tag_name')
     fi
     
     if [ -n "$DOWNLOAD_URL" ]; then
